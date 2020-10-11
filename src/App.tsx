@@ -25,7 +25,7 @@ export const CustomInput = ({ children, value, onChange }: CustomInputProps) => 
   return (
     <div>
       <label htmlFor="search">{children}</label>
-      <input id="search" value={value} onChange={onChange} />
+      <input placeholder="Example Text" id="search" value={value} onChange={onChange} />
     </div>
   );
 
