@@ -1,19 +1,4 @@
-import React, { useState } from 'react';
-import './App.css';
-
-function App() {
-  const [text, setText] = useState('');
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value)
-  }
-
-  return (
-    <div><CustomInput value={text} onChange={handleChange}>Input:</CustomInput>
-      <p>You typed: {text ?? '...'}</p>
-    </div>
-  );
-};
+import React from 'react';
 
 interface CustomInputProps {
   children: React.ReactNode,
@@ -30,5 +15,3 @@ export const CustomInput = ({ children, value, onChange }: CustomInputProps) => 
   );
 
 }
-
-export default App;

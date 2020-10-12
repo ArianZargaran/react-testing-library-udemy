@@ -1,11 +1,17 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import App from './App';
+import { getUser } from '../utils/getUser';
+import { mocked } from "ts-jest/utils";
+
+jest.mock('../utils/getUser');
+const mockGetUser = mocked(getUser, true);
 
 describe('When the App is compiled', ()=> {
-  beforeEach(() => {
+  beforeEach(async () => {
     // render method tests the snippet of HTML involved in the test
     render(<App />);
+    await waitFor(() => expect(mockGetUser).toHaveBeenCalled());
   });
 
   test('should render the App component', () => {
@@ -51,13 +57,24 @@ describe('When the App is compiled', ()=> {
     // The main difference between getByRole and queryByRole is the test won't fail if the finding try is not successful.
     // Instead, it'd return null.
     const failingResult = screen.queryByRole('whatever');
-    console.log(failingResult) // null
+    // console.log(failingResult) // null
     expect(failingResult).toBeNull();
   });
 
   test('should find the role "textbox" in our document', () => {
     const passingResult = screen.queryByRole('textbox');
-    console.log(passingResult) // <input id="search" placeholder="Example Text" value="" />
+    // console.log(passingResult) // <input id="search" placeholder="Example Text" value="" />
     expect(passingResult).not.toBeNull();
+  });
+});
+
+describe("When App component fetches user successfully", () => {
+  beforeEach(() => {
+    mockGetUser.mockClear();
+  });
+
+  test('should call getUser once', async () => {
+    render(<App />);
+    await waitFor(() => expect(mockGetUser).toHaveBeenCalledTimes(1));
   });
 });
