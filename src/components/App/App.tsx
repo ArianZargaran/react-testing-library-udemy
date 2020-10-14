@@ -19,7 +19,7 @@ function App() {
     } catch(error) {
       console.log(error)
     }
-  })
+  }, [])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setText(event.target.value)
@@ -28,6 +28,7 @@ function App() {
   return (
     <div>
       {user ? <p>Username: {user.name}</p> : null}
+      <CustomInput value={text} onChange={handleChange}>Input:</CustomInput>
       <CustomInput value={text} onChange={handleChange}>Input:</CustomInput>
       <p>You typed: {text ?? '...'}</p>
     </div>

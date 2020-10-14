@@ -22,16 +22,20 @@ describe('When the App is compiled', ()=> {
   // SEARCH TYPES:
   test('should render an input label with the text "Input"', () => {
     // Search Type by text. You can pass a String or a regex. Just remember, if you pass a text it should match completely the expected copy.
-    screen.getByText(/Input/);
+    // screen.getByText(/Input/); // For one node
+    screen.getAllByText(/Input/);
   });
 
   test('should select the input element by its role', () => {
     // Search Type by role. Searching method to retrieve elements from the page by area label.
-    screen.getByRole('textbox');
+    // screen.getByRole('textbox');
     // As you see in this test we are using an implicit assertion (no expect statement is present).
     // If the implicit assertion fails, even though there's no expect, the test will fail.
     // If we were to have an explicit assertion, we can also do it:
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    // expect(screen.getByRole('textbox')).toBeInTheDocument(); For one node
+    expect(screen.getAllByRole('textbox')[0]).toBeInTheDocument();
+    expect(screen.getAllByRole('textbox')[1]).toBeInTheDocument();
+    expect(screen.getAllByRole('textbox').length).toEqual(2);
   });
 
   test('should select a label element by its inner text', () => {
@@ -43,7 +47,8 @@ describe('When the App is compiled', ()=> {
   test('should select an input element by placeholder text', () => {
     // getByLabelText is a method to retrieve innerHTML content within Labels.
     // Similar to the getByText method, but  specifically for labels.
-    screen.getByPlaceholderText('Example Text');
+    // screen.getByPlaceholderText('Example Text'); For one node
+    screen.getAllByPlaceholderText('Example Text');
   });
 
   test('should select a label element by its inner text', () => {
@@ -62,7 +67,8 @@ describe('When the App is compiled', ()=> {
   });
 
   test('should find the role "textbox" in our document', () => {
-    const passingResult = screen.queryByRole('textbox');
+    // const passingResult = screen.queryByRole('textbox');
+    const passingResult = screen.queryAllByRole('textbox');
     // console.log(passingResult) // <input id="search" placeholder="Example Text" value="" />
     expect(passingResult).not.toBeNull();
   });
@@ -76,5 +82,14 @@ describe("When App component fetches user successfully", () => {
   test('should call getUser once', async () => {
     render(<App />);
     await waitFor(() => expect(mockGetUser).toHaveBeenCalledTimes(1));
+  });
+
+  test('should render the username passed', async () => {
+    const name = 'John';
+    mockGetUser.mockResolvedValueOnce({ id: '1', name });
+    render(<App />);
+    expect(screen.queryByText(/Username/)).toBeNull();
+    expect(await screen.findByText(/Username/)).toBeInTheDocument();
+    expect(await screen.findByText(/name/)).toBeInTheDocument();
   });
 });
