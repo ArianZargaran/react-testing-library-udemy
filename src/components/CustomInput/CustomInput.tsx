@@ -13,5 +13,4 @@ export const CustomInput = ({ children, value, onChange }: CustomInputProps) => 
       <input placeholder="Example Text" id="search" value={value} onChange={onChange} />
     </div>
   );
-
 }
