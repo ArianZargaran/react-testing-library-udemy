@@ -29,8 +29,7 @@ function App() {
     <div>
       {user ? <p>Username: {user.name}</p> : null}
       <CustomInput value={text} onChange={handleChange}>Input:</CustomInput>
-      <CustomInput value={text} onChange={handleChange}>Input:</CustomInput>
-      <p>You typed: {text ?? '...'}</p>
+      <p>You typed: {text ? text : '...'}</p>
     </div>
   );
 };

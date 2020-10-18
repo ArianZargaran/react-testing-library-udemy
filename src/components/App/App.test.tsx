@@ -1,5 +1,8 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  // fireEvent,
+  render, screen, waitFor } from '@testing-library/react';
+import userEvent from "@testing-library/user-event";
 import App from './App';
 import { getUser } from '../utils/getUser';
 import { mocked } from "ts-jest/utils";
@@ -14,9 +17,9 @@ describe('When the App is compiled', ()=> {
     await waitFor(() => expect(mockGetUser).toHaveBeenCalled());
   });
 
-  test('should render the App component', () => {
+  test('should render the App component', async () => {
     // outputs the snippet of HTML involved in the test
-    screen.debug();
+    await waitFor(() => screen.debug());
   });
 
   // SEARCH TYPES:
@@ -34,8 +37,7 @@ describe('When the App is compiled', ()=> {
     // If we were to have an explicit assertion, we can also do it:
     // expect(screen.getByRole('textbox')).toBeInTheDocument(); For one node
     expect(screen.getAllByRole('textbox')[0]).toBeInTheDocument();
-    expect(screen.getAllByRole('textbox')[1]).toBeInTheDocument();
-    expect(screen.getAllByRole('textbox').length).toEqual(2);
+    expect(screen.getAllByRole('textbox').length).toEqual(1);
   });
 
   test('should select a label element by its inner text', () => {
@@ -91,5 +93,22 @@ describe("When App component fetches user successfully", () => {
     expect(screen.queryByText(/Username/)).toBeNull();
     expect(await screen.findByText(/Username/)).toBeInTheDocument();
     expect(await screen.findByText(/name/)).toBeInTheDocument();
+  });
+});
+
+describe("When the user enters some text in the input field", async () => {
+  test('should display the text in the screen', async () => {
+    render(<App />);
+    await waitFor(() => expect(mockGetUser).toHaveBeenCalled());
+
+    await expect(screen.getByText(/You typed: .../));
+
+    // fireEvent.change(screen.getByRole('textbox'), {
+    //   target: { value: 'David' },
+    // }); // Using FireEvent
+
+    await userEvent.type(screen.getByRole('textbox'), 'David');
+
+    expect(screen.getByText(/You typed: David/));
   });
 });
